@@ -3,13 +3,13 @@ using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
 using PlayFab;
 using PlayFab.DataModels;
+using System.Threading.Tasks;
+using TCWTCG.Azure.PlayFab;
 
 namespace TCWTCG.Azure.Functions
 {
     public class HelloPlayFab
     {
-        private readonly ILogger<HelloPlayFab> _logger;
-
         [Function("HelloPlayFab")]
         public static async Task<dynamic> Run(
             [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req,
@@ -20,7 +20,7 @@ namespace TCWTCG.Azure.Functions
             dynamic args = context.FunctionArgument;
 
             var message = $"Hello {context.CallerEntityProfile.Lineage.MasterPlayerAccountId}!";
-            logger.LogInformation(message);
+            logger.LogInformation("Hello {context}!", context.CallerEntityProfile.Lineage.MasterPlayerAccountId);
 
             dynamic inputValue = null;
             if (args != null && args["inputValue"] != null)
@@ -28,7 +28,7 @@ namespace TCWTCG.Azure.Functions
                 inputValue = args["inputValue"];
             }
 
-            logger.LogDebug($"HelloWorld: {new { input = inputValue }}");
+            logger.LogDebug("HelloWorld: {val}", new { input = inputValue });
 
             // The profile of the entity specified in the 'ExecuteEntityCloudScript' request.
             // Defaults to the authenticated entity in the X-EntityToken header.
@@ -44,8 +44,7 @@ namespace TCWTCG.Azure.Functions
                     EntityToken = context.TitleAuthenticationContext.EntityToken
                 }
             );
-
-            var apiResult = await api.SetObjectsAsync(
+            _ = await api.SetObjectsAsync(
                 new SetObjectsRequest
                 {
                     Entity = new EntityKey
@@ -53,9 +52,8 @@ namespace TCWTCG.Azure.Functions
                         Id = entityProfile.Entity.Id,
                         Type = entityProfile.Entity.Type
                     },
-                    Objects = new List<SetObject> {
-                    new SetObject
-                    {
+                    Objects = [
+                    new() {
                         ObjectName =  "obj1",
                         DataObject = new
                         {
@@ -63,7 +61,7 @@ namespace TCWTCG.Azure.Functions
                             prop1 = "bar"
                         }
                     }
-                }
+                ]
                 });
 
             return new { messageValue = message };

@@ -1,4 +1,10 @@
-﻿namespace TCWTCG.Azure.Functions
+﻿using PlayFab.CloudScriptModels;
+using PlayFab.ProfilesModels;
+using System;
+using System.Collections.Generic;
+using CloudScript = PlayFab.CloudScriptModels;
+
+namespace TCWTCG.Azure.PlayFab
 {
     // Shared models
     public class TitleAuthenticationContext
@@ -10,7 +16,7 @@
     // Models  via ExecuteFunction API
     public class FunctionExecutionContext<T>
     {
-        public PlayFab.ProfilesModels.EntityProfileBody CallerEntityProfile { get; set; }
+        public EntityProfileBody CallerEntityProfile { get; set; }
         public TitleAuthenticationContext TitleAuthenticationContext { get; set; }
         public bool? GeneratePlayStreamEvent { get; set; }
         public T FunctionArgument { get; set; }
@@ -24,9 +30,9 @@
     // player segment or as part of a player segment based scheduled task.
     public class PlayerPlayStreamFunctionExecutionContext<T>
     {
-        public PlayFab.CloudScriptModels.PlayerProfileModel PlayerProfile { get; set; }
+        public PlayerProfileModel PlayerProfile { get; set; }
         public bool PlayerProfileTruncated { get; set; }
-        public PlayFab.CloudScriptModels.PlayStreamEventEnvelopeModel PlayStreamEventEnvelope { get; set; }
+        public PlayStreamEventEnvelopeModel PlayStreamEventEnvelope { get; set; }
         public TitleAuthenticationContext TitleAuthenticationContext { get; set; }
         public bool? GeneratePlayStreamEvent { get; set; }
         public T FunctionArgument { get; set; }
@@ -46,7 +52,7 @@
 
     public class ScheduledTaskFunctionExecutionContext<T>
     {
-        public PlayFab.CloudScriptModels.NameIdentifier ScheduledTaskNameId { get; set; }
+        public NameIdentifier ScheduledTaskNameId { get; set; }
         public Stack<PlayStreamEventHistory> EventHistory { get; set; }
         public TitleAuthenticationContext TitleAuthenticationContext { get; set; }
         public bool? GeneratePlayStreamEvent { get; set; }
@@ -77,11 +83,11 @@
         public EventFullName FullName { get; set; }
         public string Id { get; set; }
         public DateTime Timestamp { get; set; }
-        public PlayFab.CloudScriptModels.EntityKey Entity { get; set; }
-        public PlayFab.CloudScriptModels.EntityKey Originator { get; set; }
+        public CloudScript.EntityKey Entity { get; set; }
+        public CloudScript.EntityKey Originator { get; set; }
         public OriginInfo OriginInfo { get; set; }
         public T Payload { get; set; }
-        public PlayFab.ProfilesModels.EntityLineage EntityLineage { get; set; }
+        public EntityLineage EntityLineage { get; set; }
     }
 
     public class EntityPlayStreamEvent : EntityPlayStreamEvent<object>
@@ -90,7 +96,7 @@
 
     public class EntityPlayStreamFunctionExecutionContext<TPayload, TArg>
     {
-        public PlayFab.ProfilesModels.EntityProfileBody CallerEntityProfile { get; set; }
+        public EntityProfileBody CallerEntityProfile { get; set; }
         public EntityPlayStreamEvent<TPayload> PlayStreamEvent { get; set; }
         public TitleAuthenticationContext TitleAuthenticationContext { get; set; }
         public bool? GeneratePlayStreamEvent { get; set; }

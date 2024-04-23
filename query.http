@@ -1,0 +1,40 @@
+@titleId = B2B59
+@baseUrl = https://{{titleId}}.playfabapi.com
+
+###
+# @name LoginWithCustomID
+POST {{baseUrl}}/Client/LoginWithCustomID
+Accept-Encoding: gzip
+Content-Type: application/json
+
+{
+  "CustomId": "VSCode",
+  "CreateAccount": true,
+  "TitleId": "{{titleId}}"
+}
+
+@entityToken = {{LoginWithCustomID.response.body.$.data.EntityToken.EntityToken}}
+@entity = {{LoginWithCustomID.response.body.$.data.EntityToken.Entity}}
+
+###
+# @name ExecuteFunction
+POST {{baseUrl}}/CloudScript/ExecuteFunction
+Accept-Encoding: gzip
+Content-Type: application/json
+X-EntityToken: {{entityToken}}
+
+{
+  "FunctionName": "HelloPlayFab"
+}
+
+###
+# @name GetObjects
+POST {{baseUrl}}/Object/GetObjects
+Accept-Encoding: gzip
+Content-Type: application/json
+X-EntityToken: {{entityToken}}
+
+{
+  "Entity": {{entity}},
+  "Objects": ["obj1"]
+}
