@@ -20,7 +20,7 @@ namespace TCWTCG.Azure.Functions
             dynamic args = context.FunctionArgument;
 
             var message = $"Hello {context.CallerEntityProfile.Lineage.MasterPlayerAccountId}!";
-            logger.LogInformation("Hello {context}!", context.CallerEntityProfile.Lineage.MasterPlayerAccountId);
+            logger.LogInformation(message);
 
             dynamic inputValue = null;
             if (args != null && args["inputValue"] != null)
