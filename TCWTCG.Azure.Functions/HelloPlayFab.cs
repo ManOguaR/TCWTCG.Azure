@@ -19,7 +19,7 @@ namespace TCWTCG.Azure.Functions
 
             dynamic args = context.FunctionArgument;
 
-            var message = $"Hello PlayFab!";
+            var message = "Hello PlayFab!";
             //var message = $"Hello {(context.CallerEntityProfile.Lineage.MasterPlayerAccountId ?? "Unknown player")}!";
             logger.LogInformation(message);
 
