@@ -10,10 +10,16 @@ namespace TCWTCG.Azure.Functions
 {
     public class HelloPlayFab
     {
+        private readonly ILogger<HelloPlayFab> _logger;
+
+        public HelloPlayFab(ILogger<HelloPlayFab> logger)
+        {
+            _logger = logger;
+        }
+
         [Function("HelloPlayFab")]
-        public static async Task<dynamic> Run(
-            [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req,
-            ILogger<HelloPlayFab> logger)
+        public async Task<dynamic> Run(
+            [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req)
         {
             FunctionExecutionContext<dynamic> context = await req.ReadFromJsonAsync<FunctionExecutionContext<dynamic>>();
 
@@ -21,7 +27,7 @@ namespace TCWTCG.Azure.Functions
 
             var message = "Hello PlayFab!";
             //var message = $"Hello {(context.CallerEntityProfile.Lineage.MasterPlayerAccountId ?? "Unknown player")}!";
-            logger.LogInformation(message);
+            _logger.LogInformation(message);
 
             dynamic inputValue = null;
             if (args != null && args["inputValue"] != null)
@@ -29,7 +35,7 @@ namespace TCWTCG.Azure.Functions
                 inputValue = args["inputValue"];
             }
 
-            logger.LogDebug($"HelloWorld: {new { input = inputValue }}");
+            _logger.LogDebug($"HelloWorld: {new { input = inputValue }}");
 
             // The profile of the entity specified in the 'ExecuteEntityCloudScript' request.
             // Defaults to the authenticated entity in the X-EntityToken header.
