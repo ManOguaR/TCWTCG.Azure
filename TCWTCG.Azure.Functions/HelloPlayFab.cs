@@ -19,7 +19,8 @@ namespace TCWTCG.Azure.Functions
 
             dynamic args = context.FunctionArgument;
 
-            var message = $"Hello {(context.CallerEntityProfile.Lineage.MasterPlayerAccountId ?? "Unknown player")}!";
+            var message = $"Hello PlayFab!";
+            //var message = $"Hello {(context.CallerEntityProfile.Lineage.MasterPlayerAccountId ?? "Unknown player")}!";
             logger.LogInformation(message);
 
             dynamic inputValue = null;
@@ -28,7 +29,7 @@ namespace TCWTCG.Azure.Functions
                 inputValue = args["inputValue"];
             }
 
-            logger.LogDebug("HelloWorld: {val}", new { input = inputValue });
+            logger.LogDebug($"HelloWorld: {new { input = inputValue }}");
 
             // The profile of the entity specified in the 'ExecuteEntityCloudScript' request.
             // Defaults to the authenticated entity in the X-EntityToken header.
